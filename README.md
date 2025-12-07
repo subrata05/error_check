@@ -1,4 +1,4 @@
-# errcheck — Clean, Testable, Fail‑Fast Error Handling for Safety‑Critical Embedded C
+# Fail-Fast Error Handling and Deterministic Fault Injection in Embedded C : A Pattern for Safety-Critical Firmware
 
 **A compact, deterministic error-handling library for embedded systems — fail-fast behavior, detailed error context, rollback-safe cleanup, and built-in fault‑injection hooks for exhaustive testing.**
 
