@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include "../src/errcheck.h"
-#include "user_app_errors.h"  
+#include "../app/user_app_errors.h"  
 
 // --- Mock Drivers with Cleanup Functions ---
 int power_on(void)  { printf("1. Power On: OK\n"); return 1; }
