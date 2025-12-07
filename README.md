@@ -35,17 +35,17 @@ Embedded safety-critical systems require error handling that is:
 
 ```
 /src/
-  errcheck.h        // Public header: macros, types, prototypes
-  errcheck.c        // Global context + NVRAM logging stub
-  err_log.c         // Console printing helper
+  errcheck.h              // Public header: macros, types, prototypes
+  errcheck.c              // Global context + NVRAM logging stub
+  err_log.c               // Console printing helper
 /examples/
-  basic_usage.c     // CHECK() simple fail-fast example
-  rollback_cleanup.c// GOTO_CHECK() example with cleanup labels
-  fault_injection_ci.c // Compile-time injection example
-  fault_injection_rt.c // Runtime (debugger) injection example
+  basic_usage.c           // CHECK() simple fail-fast example
+  rollback_cleanup.c      // GOTO_CHECK() example with cleanup labels
+  fault_injection_ci.c    // Compile-time injection example
+  fault_injection_rt.c    // Runtime (debugger) injection example
 /app/
-  user_app_errors.h // Example app error enum and required externs
-  app_error_strings.c // Example mapping from error code -> string
+  user_app_errors.h       // Example app error enum and required externs
+  app_error_strings.c     // Example mapping from error code -> string
 
 ```
 
