@@ -38,6 +38,7 @@ typedef struct {
 } failure_context_t;
 
 extern failure_context_t g_error_context;
+extern const char* app_error_to_string(err_t code);
 
 /* Function prototypes */
 void errcheck_log_to_nvram(void);
