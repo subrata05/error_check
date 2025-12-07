@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include "../src/errcheck.h"
-#include "user_app_errors.h"
+#include "../app/user_app_errors.h"
 
 // --- 1. COMPILE-TIME FAULT INJECTION CONTROL ---
 // This flag is typically passed via the compiler (e.g., -D INJECT_ERR_SENSOR)
