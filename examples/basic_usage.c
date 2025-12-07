@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include "../src/errcheck.h"
-#include "user_app_errors.h" // Contains error definitions
+#include "../app/user_app_errors.h" // Contains error definitions
 
 // --- Mock Drivers (Return 1 for Success, 0 for Failure) ---
 int init_power(void)   { printf("Power regulator: OK\n"); return 1; }
