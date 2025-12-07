@@ -1,77 +1,44 @@
 /**
  * =============================================================================
  * examples/basic_usage.c
- * * Demonstrates the core Fail-Fast use case with the CHECK macro, 
- * utilizing the new Rich Error Context structure.
+ * * Demonstrates the standard Fail-Fast flow using the CHECK macro.
  * =============================================================================
  */
 
-#include <stdio.h>      
-#include "../src/errcheck.h" 
+#include <stdio.h>
+#include "../src/errcheck.h"
+#include "user_app_errors.h" // Contains error definitions
 
-/* -------------------------------------------------------------------------
- * User-defined error type and constants
- * ------------------------------------------------------------------------- */
-typedef enum {
-    ERR_NONE = ERR_SUCCESS, // Success
-    ERR_POWER,              // Power regulator failed
-    ERR_SENSOR,             // Sensor initialization failed
-    ERR_RADIO               // Radio module failed
-} err_t;
+// --- Mock Drivers (Return 1 for Success, 0 for Failure) ---
+int init_power(void)   { printf("Power regulator: OK\n"); return 1; }
+int init_sensor(void)  { printf("Sensor: OK\n"); return 1; }
+int init_radio(void)   { printf("Radio: FAILED\n"); return 0; } // Intentional failure
 
-// Global variables are defined in errcheck.c and externed in errcheck.h
-
-/* -------------------------------------------------------------------------
- * Hardware initialization functions
- * ------------------------------------------------------------------------- */
-int init_power(void)
+/**
+ * @brief Initializes devices using the simple CHECK macro.
+ * Execution stops immediately at the first failure.
+ */
+err_t device_init_simple(void)
 {
-    printf("Power regulator: OK\n");
-    return 1;              // 1 = success, 0 = failure
-}
+    printf("--- Running Simple Device Init ---\n");
+    CHECK(init_power(),  ERR_POWER);    // Success
+    CHECK(init_sensor(), ERR_SENSOR);   // Success
+    CHECK(init_radio(),  ERR_RADIO);    // Failure -> Returns ERR_FAILURE here
 
-int init_sensor(void)
-{
-    printf("Sensor: OK\n");
-    return 1;
-}
-
-int init_radio(void)
-{
-    printf("Radio: FAILED\n");
-    return 0;              // ← This one intentionally fails
-}
-
-/* -------------------------------------------------------------------------
- * Device initialization using errcheck.h
- * If any step fails → immediately return with correct error code and context
- * ------------------------------------------------------------------------- */
-err_t device_init(void)
-{
-    /* CHECK(call, error_flag) sets g_error_context on failure and returns ERR_FAILURE */
-    CHECK(init_power(),  ERR_POWER);    // Line 1: will succeed
-    CHECK(init_sensor(), ERR_SENSOR);   // Line 2: will succeed
-    CHECK(init_radio(),  ERR_RADIO);    // Line 3: will fail → function returns here!
-
-    // This line is only reached if ALL checks passed
-    return ERR_SUCCESS;
+    // This line is never reached on failure
+    return APP_ERR_NONE; 
 }
 
 int main(void)
 {
-    printf("Starting device initialization...\n");
-
-    err_t result = device_init();
+    err_t result = device_init_simple();
 
     if (result == ERR_FAILURE) {
         printf("\nInitialization FAILED!\n");
-        printf("→ Error code = %d (ERR_RADIO = %d)\n", g_error_context.code, ERR_RADIO);
-        printf("→ Failure occurred in file: %s at line: %lu\n", 
-               g_error_context.file, g_error_context.line);
-        // The NVRAM logging stub was called automatically by CHECK
+        // Use the print utility to display the captured context
+        errcheck_print_last_error();
     } else {
         printf("\nInitialization successful!\n");
     }
-
     return 0;
 }
