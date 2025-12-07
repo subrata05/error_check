@@ -9,7 +9,7 @@
 #define ERRCHECK_ENABLE_RUNTIME_INJECTION   // REQUIRED to activate injection hooks
 #include <stdio.h>
 #include "../src/errcheck.h"
-#include "user_app_errors.h"
+#include "../app/user_app_errors.h"
 
 // Global injection trigger is externed from errcheck.c
 
